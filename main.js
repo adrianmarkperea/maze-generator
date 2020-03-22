@@ -1,8 +1,15 @@
 const WIDTH = 400;
 const HEIGHT = 400;
-const SIZE = 40;
+const SIZE = 20;
 const ROWS = HEIGHT / SIZE;
 const COLS = WIDTH / SIZE;
+
+const COLORS = {
+  bg: '#652ec7',
+  wall: '#ffd300',
+  frontier: '#de38c8',
+  in: '#33135c',
+}
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -11,7 +18,7 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
 let grid;
-let walls = [];
+let frontiers = [];
 
 function init() {
   grid = new Array(ROWS);
@@ -25,12 +32,14 @@ function init() {
   let i = Math.floor(Math.random() * ROWS);
   let j = Math.floor(Math.random() * COLS);
 
-  grid[i][j].mark();
-  addWalls(i, j);
+  const cell = grid[i][j]
+  cell.mark();
+
+  addFrontiers(cell);
 }
 
 function draw() {
-  ctx.fillStyle = '#f5f5f5';
+  ctx.fillStyle = COLORS.bg;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
   for (let i = 0; i < grid.length; i++) {
@@ -38,28 +47,54 @@ function draw() {
       grid[i][j].render();
     }
   }
+
+  if (frontiers.length !== 0) {
+    const randFrontierIndex = Math.floor(Math.random() * frontiers.length);
+    const frontier = frontiers[randFrontierIndex];
+    frontiers.splice(randFrontierIndex, 1);
+
+    const neighbors = frontier.getNeighbors();
+    const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
+
+    // if (neighbors.length > 1) {
+    randomNeighbor.removeWalls(frontier);
+    //}
+
+    frontier.mark();
+    addFrontiers(frontier);
+
+    requestAnimationFrame(draw);
+  }
 }
 
 init();
-draw();
+requestAnimationFrame(draw);
 
-function addWalls(i, j) {
-  addWall(i - 1, j);
-  addWall(i, j + 1);
-  addWall(i + 1, j);
-  addWall(i, j - 1);
-}
-
-function addWall(i, j) {
+function get(i, j) {
   if (i < 0 || i >= ROWS || j < 0 || j>= COLS) {
     return;
   }
 
-  const cell = grid[i][j];
-  if (cell.in || cell.frontier) {
+  return grid[i][j];
+}
+
+function addFrontiers(cell) {
+  const i = cell.i;
+  const j = cell.j;
+
+  addFrontier(i - 1, j);
+  addFrontier(i, j + 1);
+  addFrontier(i + 1, j);
+  addFrontier(i, j - 1);
+}
+
+function addFrontier(i, j) {
+  const cell = get(i, j);
+
+  if (!cell || cell.in || cell.frontier) {
     return;
   }
 
-  cell.frontier = true;  
-  walls.push(cell);
+  cell.markAsFrontier();  
+  frontiers.push(cell);
 }

@@ -16,21 +16,72 @@ function Cell(i, j) {
     this.in = true;
   }
 
+  this.markAsFrontier = function() {
+    this.frontier = true;
+  }
+
+  this.getNeighbors = function() {
+    const neighbors = [];
+
+    const top = get(i, j - 1);
+    const right = get(i + 1, j);
+    const bottom = get(i, j + 1);
+    const left = get(i - 1, j);
+
+    if (top && top.in) {
+      neighbors.push(top);
+    }
+
+    if (right && right.in) {
+      neighbors.push(right);
+    }
+
+    if (bottom && bottom.in) {
+      neighbors.push(bottom);
+    }
+
+    if (left && left.in) {
+      neighbors.push(left);
+    }
+
+    return neighbors;
+  }
+
+  this.removeWalls = function(other) {
+    const di = this.i - other.i;
+    if (di === 1) {
+      this.walls.top = false;
+      other.walls.bottom = false;
+    } else if (di === -1) {
+      this.walls.bottom = false;
+      other.walls.top = false;
+    }
+
+    const dj = this.j - other.j;
+    if (dj === 1) {
+      this.walls.left = false;
+      other.walls.right = false;
+    } else if (dj === -1) {
+      this.walls.right = false;
+      other.walls.left = false;
+    }
+  }
+
   this.render = function() {
     x = this.j * SIZE;
     y = this.i * SIZE;
 
     if (this.frontier) {
-      ctx.fillStyle = '#f0eb8999';
+      ctx.fillStyle = COLORS.frontier;
       ctx.fillRect(x, y, SIZE, SIZE);
     }
 
     if (this.in) {
-      ctx.fillStyle = '#f0eb89';
+      ctx.fillStyle = COLORS.in;
       ctx.fillRect(x, y, SIZE, SIZE);
     }
 
-    ctx.strokeStyle = '#ff737344';
+    ctx.strokeStyle = COLORS.wall;
     if (this.walls.top) {
       ctx.beginPath();
       ctx.moveTo(x, y);
