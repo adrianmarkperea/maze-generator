@@ -16,6 +16,11 @@ function Cell(i, j) {
     x = this.j * SIZE;
     y = this.i * SIZE;
 
+    if (this.in) {
+      ctx.fillStyle = '#f0eb8999';
+      ctx.fillRect(x, y, SIZE, SIZE);
+    }
+
     ctx.strokeStyle = '#ff737344';
     if (this.walls.top) {
       ctx.beginPath();

@@ -20,6 +20,11 @@ function init() {
       grid[i][j] = new Cell(i, j);
     }
   }
+
+  let i = Math.floor(Math.random() * ROWS);
+  let j = Math.floor(Math.random() * COLS);
+
+  mark(grid[i][j]);
 }
 
 function draw() {
@@ -35,4 +40,8 @@ function draw() {
 
 init();
 draw();
+
+function mark(cell) {
+  cell.in = true;
+}
 
