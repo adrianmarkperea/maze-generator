@@ -11,6 +11,7 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
 let grid;
+let walls = [];
 
 function init() {
   grid = new Array(ROWS);
@@ -25,6 +26,7 @@ function init() {
   let j = Math.floor(Math.random() * COLS);
 
   grid[i][j].mark();
+  addWalls(i, j);
 }
 
 function draw() {
@@ -41,3 +43,23 @@ function draw() {
 init();
 draw();
 
+function addWalls(i, j) {
+  addWall(i - 1, j);
+  addWall(i, j + 1);
+  addWall(i + 1, j);
+  addWall(i, j - 1);
+}
+
+function addWall(i, j) {
+  if (i < 0 || i >= ROWS || j < 0 || j>= COLS) {
+    return;
+  }
+
+  const cell = grid[i][j];
+  if (cell.in || cell.frontier) {
+    return;
+  }
+
+  cell.frontier = true;  
+  walls.push(cell);
+}

@@ -20,8 +20,13 @@ function Cell(i, j) {
     x = this.j * SIZE;
     y = this.i * SIZE;
 
-    if (this.in) {
+    if (this.frontier) {
       ctx.fillStyle = '#f0eb8999';
+      ctx.fillRect(x, y, SIZE, SIZE);
+    }
+
+    if (this.in) {
+      ctx.fillStyle = '#f0eb89';
       ctx.fillRect(x, y, SIZE, SIZE);
     }
 
