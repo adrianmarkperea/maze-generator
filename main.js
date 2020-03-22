@@ -10,21 +10,25 @@ const ctx = canvas.getContext('2d');
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
-const grid = new Array(ROWS);
+let grid;
 
 function init() {
+  grid = new Array(ROWS);
   for (let i = 0; i < grid.length; i++) {
     grid[i] = new Array(COLS);
     for (let j = 0; j < grid[i].length; j++) {
-      grid[i][j] = new Cell(j, i);
+      grid[i][j] = new Cell(i, j);
     }
   }
 }
 
 function draw() {
+  ctx.fillStyle = '#f5f5f5';
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
   for (let i = 0; i < grid.length; i++) {
     for (let j = 0; j < grid[i].length; j++) {
-      grid[i][j].render(ctx);
+      grid[i][j].render();
     }
   }
 }
