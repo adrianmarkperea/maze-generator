@@ -12,6 +12,10 @@ function Cell(i, j) {
   this.in = false;
   this.frontier = false;
 
+  this.mark = function() {
+    this.in = true;
+  }
+
   this.render = function() {
     x = this.j * SIZE;
     y = this.i * SIZE;
@@ -49,6 +53,5 @@ function Cell(i, j) {
       ctx.lineTo(x, y);
       ctx.stroke();
     }
-
   }
 }

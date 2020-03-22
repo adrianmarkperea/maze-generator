@@ -24,7 +24,7 @@ function init() {
   let i = Math.floor(Math.random() * ROWS);
   let j = Math.floor(Math.random() * COLS);
 
-  mark(grid[i][j]);
+  grid[i][j].mark();
 }
 
 function draw() {
@@ -40,8 +40,4 @@ function draw() {
 
 init();
 draw();
-
-function mark(cell) {
-  cell.in = true;
-}
 
